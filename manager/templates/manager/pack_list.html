@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load humanize %}
+ 
+{% block content %}
+
+{% if pack_list %}
+    <div class="panel panel-default">
+
+      <!-- Table -->
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Pack Name</th>
+            <th>Edition</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pack in pack_list %}
+	        <tr>
+		        <th scope="row"><input type="checkbox" name="vehicle" value="Bike"></th>
+		        <td><a href="{% url 'manager:pack-detail' pack.id %}">{{ pack.name }}</a></td>
+	            <td>{{ pack.edition }}</td>
+	            <td>{{ pack.date_modified|naturalday }}</td>
+		        
+	        </tr>
+	    {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% else %}
+    <p>No Packs are available.</p>
+{% endif %}
+
+{% endblock %}

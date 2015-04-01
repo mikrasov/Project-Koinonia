@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ pack.name }}</h1>
+
+<ul>
+{% for character in pack.character_set.all %}
+    <li>{{ character.name }} -- {{ character.votes }} vote{{ character.votes|pluralize }}</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'manager:pack-detail' pack.id %}">Vote again?</a>
+
+{% endblock %}

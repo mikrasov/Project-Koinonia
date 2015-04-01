@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ pack.name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'manager:vote' pack.id %}" method="post">
+{% csrf_token %}
+{% for character in pack.character_set.all %}
+    <input type="radio" name="character" id="character{{ forloop.counter }}" value="{{ character.id }}" />
+    <label for="character{{forloop.counter }}">{{ character.name }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>
+{% endblock %} 

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>Editing Character: {{ character.name }}</h1>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3></span>Details:</h3></div>
+		<div class="panel-body">
+		
+			<form action="" method="post">{% csrf_token %}
+			   
+				{{ form.as_p }}
+
+				<div class="pull-right">
+					<a class="btn btn-danger" href="{% url 'manager:character-detail' character.id %}">Cancel</a>
+				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+{% endblock %} 

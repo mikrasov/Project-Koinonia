@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>Editing Pack: {{ pack.name }}</h1>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3></span> Details:</h3></div>
+		<div class="panel-body">
+		
+			<form action="" method="post">{% csrf_token %}
+			   
+				{{ form.as_p }}
+
+				<div class="pull-right">
+					<a class="btn btn-danger" href="{% url 'manager:pack-detail' pack.id %}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
+				  {% if pack %}
+				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
+				  {% else %}
+				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Create</button>
+				  {% endif %}
+				</div>
+			</form>
+		</div>
+	</div>
+
+{% endblock %} 

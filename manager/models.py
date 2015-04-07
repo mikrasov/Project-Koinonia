@@ -8,6 +8,8 @@ class Pack(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.edition)
 
 class Character(models.Model):
     pack = models.ForeignKey(Pack)
@@ -16,8 +18,13 @@ class Character(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
     bio = models.TextField(blank=True)
     gmnotes = models.TextField(blank=True)
-    votes = models.IntegerField()
-    source = models.CharField(max_length=200)
+    source = models.CharField(max_length=200, blank=True)
+    
+    class Meta:
+        ordering = ["name"]
+        
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.source)
 
 
 class Ability(models.Model):
@@ -26,8 +33,22 @@ class Ability(models.Model):
     action = models.TextField(blank=True)
     istokenaction = models.BooleanField(default=True)
     
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "abilities"
+        
+    def __str__(self):
+        return '%s' % self.name
+    
 class Attribute(models.Model):
     character = models.ForeignKey(Character)
     name = models.CharField(max_length=200)
     current = models.CharField(max_length=200)
     max = models.CharField(max_length=200)
+    
+    class Meta:
+        ordering = ["name"]
+        verbose_name_plural = "atributes"
+    
+    def __str__(self):
+        return '%s' % self.name

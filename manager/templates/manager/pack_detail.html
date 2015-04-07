@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ pack.name }}</h1>
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'manager:vote' pack.id %}" method="post">
-{% csrf_token %}
-{% for character in pack.character_set.all %}
-    <input type="radio" name="character" id="character{{ forloop.counter }}" value="{{ character.id }}" />
-    <label for="character{{forloop.counter }}">{{ character.name }}</label><br />
-{% endfor %}
-<input type="submit" value="Vote" />
-</form>
+	
+	<div class="page-header">
+		<div class="pull-right">
+			<a class="btn btn-primary" href="{% url 'manager:pack-import' pack.id %}"><span class="glyphicon glyphicon-import"> Import</span></a>
+			<a class="btn btn-primary" href="{% url 'manager:pack-update' pack.id %}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+		</div>
+		<h1>{{ pack.name }}</h1>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3>Characters:</h3></div>
+		<div class="panel-body">
+			{% if pack.character_set.all %}
+				<div class="list-group">
+				{% for character in pack.character_set.all|dictsort:"name" %}
+					 <a class="list-group-item col-xs-4" href="{% url 'manager:character-detail' character.id %}">{{ character.name }}</a>	
+				{% endfor %}
+				</ul>
+			{% else %}
+			    <p>No Characters</p>
+			{% endif %}
+		</div>
+	</div>
 {% endblock %} 

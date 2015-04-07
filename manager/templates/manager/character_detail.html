@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="page-header">
+		<div class="pull-right">
+			<a class="btn btn-primary" href="{% url 'manager:character-delete' character.id %}"><span class="glyphicon glyphicon-remove"> Delete</span></a>
+			<a class="btn btn-primary" href="{% url 'manager:character-update' character.id %}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+		</div>
+		<h1>{{ character.name }}</h1>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3><span class="glyphicon glyphicon-flash"></span> Abilities:</h3></div>
+		<div class="panel-body">
+		{% if character.ability_set.all %}
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Token Macro</th>
+						<th>Content</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ability in character.ability_set.all|dictsort:"name" %}
+					<tr>
+						<th>{{ ability.name }}</th>
+						<th>
+							{% if ability.istokenaction %}
+								<span class="glyphicon glyphicon-ok"></span>
+							{% else %}
+								<span class="glyphicon glyphicon-remove"></span>
+							{% endif %}
+						</th>
+						<th>{{ ability.action }}</th>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>	
+		{% else %}
+		    <p>No Abilities</p>
+		{% endif %}
+		</div>
+	</div>
+	
+
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3><span class="glyphicon glyphicon-th-list"></span> Attributes:</h3></div>
+		<div class="panel-body">
+		{% if character.attribute_set.all %}
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Content</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for attribute in character.attribute_set.all|dictsort:"name" %}
+					<tr>
+						<th>{{ attribute.name }}</th>
+						
+						{% if attribute.max %}
+							<td> {{ attribute.current }} / {{ attribute.max }}</td>
+						{% else %}
+						    <td> {{ attribute.current }}</td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+		    <p>No Attributes</p>
+		{% endif %}
+		</div>
+	</div>
+	
+{% endblock %} 

@@ -4,12 +4,12 @@ from django.db import models
 # Create your models here.
 class Pack(models.Model):
     name = models.CharField(max_length=200)
-    edition = models.CharField(max_length=200)
+    system = models.CharField(max_length=200)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '%s (%s)' % (self.name, self.edition)
+        return '%s (%s)' % (self.name, self.system)
 
 class Character(models.Model):
     pack = models.ForeignKey(Pack)

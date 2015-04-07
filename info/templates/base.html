@@ -41,7 +41,32 @@
 	       <ul class="nav navbar-nav">
 	         <li><a href="{% url 'manager:pack-list' %}">Browse Packs</a></li>
 	         <li><a href="{% url 'manager:character-list' %}">Browse Characters</a></li>
+	       	 {% if user.is_staff %}
+			 <li>
+			 	<a href="/admin/">Admin</a>
+			 </li>
+			 {% endif %}
 	       </ul>
+	       
+	       <ul class="nav  navbar-nav navbar-right">
+		   {% if user and not user.is_anonymous %}
+		   <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name|default:user.username }} <b class="caret"></b></a>
+             <ul class="dropdown-menu">
+               <li><a href="#"><a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a></a></li>
+             </ul>
+           </li>
+		   {% else %}
+		   <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+               <ul class="dropdown-menu">
+                 <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a></li>
+		     	 <li><a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a></li>
+		     	 <li><a href="{% url 'social:begin' 'twitter' %}?next={{ request.path }}">Login with Twitter</a></li>                
+		       </ul>
+           </li>
+           {% endif %}
+		   </ul>
 	     </div><!--/.nav-collapse -->
 	   </div>
 	 </nav>

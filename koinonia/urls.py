@@ -10,4 +10,6 @@ urlpatterns = patterns('',
     url(r'^manager/', include('manager.urls', namespace="manager")),
     url(r'^$', include('info.urls', namespace="info")),
     
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('django.contrib.auth.urls', namespace='auth')),
 )

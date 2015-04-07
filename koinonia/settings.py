@@ -18,6 +18,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'yf%*8&10ju%rky%u8yzrrvu=7_*in^^@-(i_7quda1dmossdc_'
+SOCIAL_AUTH_FACEBOOK_KEY = '798369816895007'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'cddc1a7cdbabe1ee847b440106d9d711'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '298349246267-3ijkeriuj6crfs0v0f7tbgd37bs0eku1.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'vo9QuP0oam-pvm5CqMlNtidJ'
+SOCIAL_AUTH_TWITTER_KEY = 'kk7rrMKB0TmFHYDDVBQaDRnHw'
+SOCIAL_AUTH_TWITTER_SECRET = 'fgX6oX1KIY2zChfqI6RYsAceyEQZ70DhxFWJWWDz8o36g06MDb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'social.apps.django_app.default',
     'debug_toolbar',
     'info',
     'manager',
@@ -50,6 +57,25 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.contrib.auth.context_processors.auth',
+   'django.core.context_processors.debug',
+   'django.core.context_processors.i18n',
+   'django.core.context_processors.media',
+   'django.core.context_processors.static',
+   'django.core.context_processors.tz',
+   'django.contrib.messages.context_processors.messages',
+   'social.apps.django_app.context_processors.backends',
+   'social.apps.django_app.context_processors.login_redirect',
 )
 
 ROOT_URLCONF = 'koinonia.urls'

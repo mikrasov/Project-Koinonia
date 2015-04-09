@@ -14,8 +14,8 @@
 				{{ form.as_p }}
 
 				<div class="pull-right">
-					<a class="btn btn-danger" href="{% url 'manager:pack-detail' pack.id %}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
 				  {% if pack %}
+				    <a class="btn btn-danger" href="{% url 'manager:pack-detail' pack.id %}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
 				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
 				  {% else %}
 				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Create</button>

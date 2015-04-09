@@ -2,45 +2,43 @@
 {% load humanize %}
  
 {% block content %}
-
-{% if pack_list %}
-  
-    <div class="panel panel-default">
-		<div class="panel-heading">
-			<div class="pull-right">
-				<a class="btn btn-primary" href="{% url 'manager:pack-create' %}"><span class="glyphicon glyphicon-plus"></span> Create</a>
-			</div>
-			<h3>Packs:</h3>
-		</div>
-		<div class="panel-body">
-		
-      <!-- Table -->
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Pack Name</th>
-            <th>System</th>
-            <th>Last Updated</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for pack in pack_list %}
-	        <tr>
-		        <td><a href="{% url 'manager:pack-detail' pack.id %}">{{ pack.name }}</a></td>
-	            <td>{{ pack.system }}</td>
-	            <td>{{ pack.date_modified|naturalday }}</td>
-	            <td align="right">
-	            	<a class="btn btn-danger" href="{% url 'manager:pack-delete' pack.id %}"><span class="glyphicon glyphicon-remove"></span></a>
-		        	<a class="btn btn-primary" href="{% url 'manager:pack-update' pack.id %}"><span class="glyphicon glyphicon-edit"></span></a>
-		        </td>
-	        </tr>
-	    {% endfor %}
-        </tbody>
-      </table>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="pull-right">
+      <a class="btn btn-primary" href="{% url 'manager:pack-create' %}"><span class="glyphicon glyphicon-plus"></span> Create</a>
     </div>
-{% else %}
-    <p>No Packs are available.</p>
-{% endif %}
-
+    <h3>Packs:</h3>
+  </div>
+  <div class="panel-body">
+  {% if pack_list %}
+    <!-- Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th><a href="?order_by=name">Pack Name</a></th>
+          <th><a href="?order_by=system">System</a></th>
+          <th><a href="?order_by=owner">Published By</a></th>
+          <th><a href="?order_by=date_modified">Last Updated</a></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for pack in pack_list %}
+        <tr>
+          <td><a href="{% url 'manager:pack-detail' pack.id %}">{{ pack.name }}</a></td>
+          <td>{{ pack.system }}</td>
+          <td>{{ pack.owner }}</td>
+          <td>{{ pack.date_modified|naturalday }}</td>
+          <td align="right">
+            <a class="btn btn-danger" href="{% url 'manager:pack-delete' pack.id %}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-primary" href="{% url 'manager:pack-update' pack.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>No Packs are available.</p>
+    {% endif %}
+</div>
 {% endblock %}

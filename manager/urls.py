@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^pack/create/$', views.PackCreateView.as_view(), name='pack-create'),    
     url(r'^pack/update/(?P<pk>\d+)/$', views.PackUpdateView.as_view(), name='pack-update'),    
     url(r'^pack/import/(?P<pk>\d+)/$', views.PackImportView.as_view(), name='pack-import'),    
+    url(r'^pack/export/(?P<pk>\d+)/$', views.PackExportView.as_view(), name='pack-export'),    
     url(r'^pack/delete/(?P<pk>\d+)/$', views.PackDeleteView.as_view(), name='pack-delete'),    
     
     

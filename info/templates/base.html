@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load django_bootstrap_breadcrumbs %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +11,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <title>Koinonia</title>
+    <title>Koinonia - {% block title %}{% endblock %}</title>
 
     <!-- Bootstrap -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
@@ -72,7 +73,8 @@
 	 </nav>
 	
 	    <div class="container">
-	
+    	  {% render_breadcrumbs %}
+
 	      <div class="main-content">
 	      	{% block content %}{% endblock %}
 	      </div>

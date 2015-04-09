@@ -11,6 +11,13 @@
 	</div>
 	
 	<div class="panel panel-default">
+		<div class="panel-heading"><h3>Detail:</h3></div>
+		<div class="panel-body">
+			<p><strong>Posted By:</strong> {{pack.owner}}</p>
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
 		<div class="panel-heading"><h3>Characters:</h3></div>
 		<div class="panel-body">
 			{% if pack.character_set.all %}

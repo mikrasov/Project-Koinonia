@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^manager/', include('manager.urls', namespace="manager")),
     url(r'^$', include('info.urls', namespace="info")),
     
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url('', include('django.contrib.auth.urls', namespace='auth')),
 )

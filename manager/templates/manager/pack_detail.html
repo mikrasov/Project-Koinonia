@@ -4,8 +4,8 @@
 	
 	<div class="page-header">
 		<div class="pull-right">
-			<a class="btn btn-primary" href="{% url 'manager:pack-import' pack.id %}"><span class="glyphicon glyphicon-import"> Import</span></a>
-			<a class="btn btn-primary" href="{% url 'manager:pack-update' pack.id %}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+			<a class="btn btn-primary" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
+			<a class="btn btn-primary" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
 		</div>
 		<h1>{{ pack.name }}</h1>
 	</div>
@@ -23,7 +23,7 @@
 			{% if pack.character_set.all %}
 				<div class="list-group">
 				{% for character in pack.character_set.all|dictsort:"name" %}
-					 <a class="list-group-item col-xs-4" href="{% url 'manager:character-detail' character.id %}">{{ character.name }}</a>	
+					 <a class="list-group-item col-xs-4" href="{{ character.get_absolute_url }}">{{ character.name }}</a>	
 				{% endfor %}
 				</ul>
 			{% else %}

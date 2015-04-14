@@ -3,18 +3,22 @@
 {% block title %}Editing Character:  {{ character.name }}{% endblock %}
 
 {% block actions %}
-	<a class="btn btn-primary" href="{% url 'manager:character-delete' character.id %}"><span class="glyphicon glyphicon-remove"> Delete</span></a>
-	<a class="btn btn-primary" href="{% url 'manager:character-update' character.id %}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	<a class="btn btn-danger" href="{{ character.get_absolute_url }}">Cancel</a>
+	<button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
 {% endblock %}
 
 {% block details %}	
-	<form action="" method="post">{% csrf_token %}
-	   
-		{{ form.as_p }}
+	<div class="col-xs-2"><strong>Name:</strong></div>	
+	<div class="col-xs-10">{{ form.name }}</div>
 	
-		<div class="pull-right">
-			<a class="btn btn-danger" href="{% url 'manager:character-detail' character.id %}">Cancel</a>
-		    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
-		</div>
-	</form>
+	<div class="col-xs-2"><strong>Source:</strong></div>
+	<div class="col-xs-10">{{ form.source }}</div>
+{% endblock %}
+
+{% block bio %}
+	<p>{{ form.bio }}</p>
+{% endblock %}
+
+{% block notes %}
+	<p>{{ form.gmnotes }}</p>
 {% endblock %}

@@ -12,7 +12,7 @@
 			<form action="" method="post">{% csrf_token %}
 			    <p>Are you sure you want to delete "{{ object }}"?</p>
 			    <div class="pull-right">
-					<a class="btn btn-primary" href="{% url 'manager:character-detail' character.id %}"><span class="glyphicon glyphicon-chevron-left"> Cancel</span></a>
+					<a class="btn btn-primary" href="{{ character.get_absolute_url }}"><span class="glyphicon glyphicon-chevron-left"> Cancel</span></a>
 					<button type="submit"  class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>		
 				</div>
 			</form>

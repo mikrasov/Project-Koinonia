@@ -23,7 +23,7 @@
           {% for character in character_list %}
 	        <tr>
 		        <th scope="row"><input type="checkbox" name="vehicle" value="Bike"></th>
-		        <td><a href="{% url 'manager:character-detail' character.id %}">{{ character.name }}</a></td>
+		        <td><a href="{{ character.get_absolute_url }}">{{ character.name }}</a></td>
 	        </tr>
 	    {% endfor %}
         </tbody>

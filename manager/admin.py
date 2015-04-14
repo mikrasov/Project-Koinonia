@@ -6,15 +6,26 @@ class AbilityInline(admin.TabularInline):
 
 class AttributesInline(admin.TabularInline):
     model = Ability    
-    
+
+class CharacterInline(admin.TabularInline):
+    model = Character
+    fields = ('name', 'source', 'slug')
+    show_change_link = True;
+        
 class PackAdmin(admin.ModelAdmin):
-    list_display = ('name','system', 'date_created')
-
-
+    search_fields = ('name', 'system', 'owner')
+    list_display = ('name', 'system', 'owner', 'date_created','date_modified')
+    list_filter = ('date_created','date_modified')
+    inlines = [CharacterInline]
+    
 class CharacterAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'source')
+    list_display = ('name', 'source', 'date_created','date_modified','pack')
+    list_filter = ('date_created','date_modified')
     inlines = [AbilityInline, AttributesInline]
-    list_display = ('name','source')
-
+    
 # Register your models here.
 admin.site.register(Pack, PackAdmin)
 admin.site.register(Character, CharacterAdmin)
+admin.site.register(Ability)
+admin.site.register(Attribute)

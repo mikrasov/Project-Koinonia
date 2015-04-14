@@ -25,13 +25,13 @@
       <tbody>
       {% for pack in pack_list %}
         <tr>
-          <td><a href="{% url 'manager:pack-detail' pack.id %}">{{ pack.name }}</a></td>
+          <td><a href="{{pack.get_absolute_url}}">{{ pack.name }}</a></td>
           <td>{{ pack.system }}</td>
           <td>{{ pack.owner }}</td>
           <td>{{ pack.date_modified|naturalday }}</td>
           <td align="right">
-            <a class="btn btn-danger" href="{% url 'manager:pack-delete' pack.id %}"><span class="glyphicon glyphicon-remove"></span></a>
-            <a class="btn btn-primary" href="{% url 'manager:pack-update' pack.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+            <a class="btn btn-danger" href="{{pack.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-primary" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"></span></a>
           </td>
         </tr>
       {% endfor %}

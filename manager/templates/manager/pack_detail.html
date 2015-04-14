@@ -1,34 +1,55 @@
-{% extends "base.html" %}
+{% extends "manager/pack.html" %}
+{% load humanize %}
 
-{% block content %}
+{% block title %}{{ pack.name }}{% endblock %}
 	
-	<div class="page-header">
-		<div class="pull-right">
-			<a class="btn btn-primary" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
-			<a class="btn btn-primary" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
-		</div>
-		<h1>{{ pack.name }}</h1>
-	</div>
+{% block actions %}
+	<a class="btn btn-info" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
+	<a class="btn btn-primary" href="{{pack.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>
+	<a class="btn btn-warning" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+{% endblock %}
+
+{% block details %}	
+	<div class="col-xs-2"><strong>Name:</strong></div>	
+	<div class="col-xs-10">{{ pack.name }}</div>
 	
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3>Detail:</h3></div>
-		<div class="panel-body">
-			<p><strong>Posted By:</strong> {{pack.owner}}</p>
-		</div>
-	</div>
+	<div class="col-xs-2"><strong>System:</strong></div>
+	<div class="col-xs-10">{{ pack.system }}</div>
 	
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3>Characters:</h3></div>
-		<div class="panel-body">
-			{% if pack.character_set.all %}
-				<div class="list-group">
-				{% for character in pack.character_set.all|dictsort:"name" %}
-					 <a class="list-group-item col-xs-4" href="{{ character.get_absolute_url }}">{{ character.name }}</a>	
-				{% endfor %}
-				</ul>
-			{% else %}
-			    <p>No Characters</p>
-			{% endif %}
-		</div>
-	</div>
-{% endblock %} 
+	<div class="col-xs-2"><strong>Posted By:</strong></div>	
+	<div class="col-xs-10">{{ pack.owner }}</div>
+	
+	<div class="col-xs-2"><strong>Created:</strong></div>	
+	<div class="col-xs-10">{{ pack.date_created|naturaltime }}</div>
+	
+	<div class="col-xs-2"><strong>Last Updated:</strong></div>	
+	<div class="col-xs-10">{{ pack.date_modified|naturaltime }}</div>
+{% endblock %}
+
+{% block characters %}	
+	{% if pack.character_set.all %}
+	<!-- Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Last Updated</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for character in pack.character_set.all %}
+        <tr>
+          <td><a href="{{character.get_absolute_url}}">{{ character.name }}</a></td>
+          <td>{{ character.source }}</td>
+          <td>{{ character.date_modified|naturalday }}</td>
+          <td align="right"></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+     <p>No Characters</p>
+    {% endif %}
+{% endblock %}

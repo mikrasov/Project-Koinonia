@@ -1,28 +1,52 @@
-{% extends "base.html" %}
+{% extends "manager/pack.html" %}
+{% load humanize %}
 
-{% block content %}
-	<div class="page-header">
-		<h1>Editing Pack: {{ pack.name }}</h1>
-	</div>
+{% block title %}Editing Pack: {{ pack.name }}{% endblock %}
 	
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3></span> Details:</h3></div>
-		<div class="panel-body">
-		
-			<form action="" method="post">{% csrf_token %}
-			   
-				{{ form.as_p }}
+{% block actions %}
+  {% if pack %}
+    <a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
+    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
+  {% else %}
+    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Create</button>
+  {% endif %}
+{% endblock %}
 
-				<div class="pull-right">
-				  {% if pack %}
-				    <a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
-				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Update</button>
-				  {% else %}
-				    <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Create</button>
-				  {% endif %}
-				</div>
-			</form>
-		</div>
-	</div>
+{% block details %}	
+	<div class="col-xs-2"><strong>Name:</strong></div>	
+	<div class="col-xs-10">{{ form.name }}</div>
+	
+	<div class="col-xs-2"><strong>System:</strong></div>
+	<div class="col-xs-10">{{ form.system }}</div>
+{% endblock %}
 
-{% endblock %} 
+{% block characters %}	
+	{% if pack.character_set.all %}
+	<!-- Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Last Updated</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for character in pack.character_set.all %}
+        <tr>
+          <td><a href="{{character.get_absolute_url}}">{{ character.name }}</a></td>
+          <td>{{ character.source }}</td>
+          <td>{{ character.date_modified|naturalday }}</td>
+          <td align="right">
+            <a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"></span></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+     <p>No Characters</p>
+    {% endif %}
+{% endblock %}

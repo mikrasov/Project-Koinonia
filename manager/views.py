@@ -1,15 +1,12 @@
 import json
-import uuid
 
-from django.core import serializers
-from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.utils.text import slugify
 
-from manager.models import Pack, Character, Ability, Attribute
-from manager.mixins import OwnerCheckMixin, LoginRequiredMixin
+from manager.models import Pack, Character
+from manager.mixins import JsonIoMixin, OwnerCheckMixin, LoginRequiredMixin
 
 # Pack Views
 class PackListView(generic.ListView):
@@ -26,6 +23,8 @@ class PackCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = '../'
     template_name_suffix = '_edit'
     fields = ['name', 'system']
+    
+    can_edit = "bob"
     
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -47,7 +46,7 @@ class PackUpdateView(OwnerCheckMixin, generic.UpdateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-class PackImportView(OwnerCheckMixin, generic.detail.SingleObjectMixin, generic.View):
+class PackImportView(JsonIoMixin, OwnerCheckMixin, generic.detail.SingleObjectMixin, generic.View):
     model = Pack
     template_name_suffix = '_import'
 
@@ -56,63 +55,14 @@ class PackImportView(OwnerCheckMixin, generic.detail.SingleObjectMixin, generic.
         self.object = self.get_object()
                 
         try:
-            data = json.loads(request.POST["import_data"])
-         
+            self.import_json(request.POST["import_data"])
+            return HttpResponseRedirect( self.object.get_absolute_url() )
         except ValueError:
-            # Invalid JSON
+            # If Invalid JSON
             return render(request, 'manager/pack_import.html', {
                 'pack': self.object,
                 'error_message': "Invalid JSON",
             })
-        else:
- 
-            charactersToAdd = []
-            charactersExisting = []
-            abilityToAdd = []
-            attributeToAdd = []
-
-            # Existing characters
-            existingCharacters = Character.objects.filter(pack=self.object)
-            for character in data["characters"]:
-                #Skip blank character name
-                if character["name"] =='':
-                    continue
-                
-                importedChar = Character(pack=self.object)
-                importedChar.name = character["name"]
-                importedChar.slug = slugify(character["name"])
-                    
-                if existingCharacters.filter(name=character["name"]).exists():
-                    charactersExisting.append(importedChar)
-                    character["alreadyExists"] = True
-                else:
-                    charactersToAdd.append(importedChar)
-                    character["alreadyExists"] = False
-                
-            Character.objects.bulk_create(charactersToAdd)
-
-            packChars = Character.objects.filter(pack=self.object)
-            for character in data["characters"]:    
-                if not character["alreadyExists"]:
-                    onChar = packChars.get(name=character["name"]);
-                    for ability in character["abilities"]:
-                        importedAbility = Ability(character=onChar)
-                        importedAbility.name = ability["name"]
-                        importedAbility.action = ability["action"]
-                        importedAbility.istokenaction = ability["istokenaction"]
-                        abilityToAdd.append(importedAbility)
-                    
-                    for attribute in character["attributes"]:
-                        importedAttribute = Attribute(character=onChar)
-                        importedAttribute.name = attribute["name"]
-                        importedAttribute.current = attribute["current"]
-                        importedAttribute.max = attribute["max"]
-                        attributeToAdd.append(importedAttribute)
-                
-            Ability.objects.bulk_create(abilityToAdd)
-            Attribute.objects.bulk_create(attributeToAdd)
-                    
-            return HttpResponseRedirect( self.object.get_absolute_url() )
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -120,18 +70,17 @@ class PackImportView(OwnerCheckMixin, generic.detail.SingleObjectMixin, generic.
             'pack': self.object,
         })
         
-class PackExportView(LoginRequiredMixin, generic.detail.SingleObjectMixin, generic.View):
+class PackExportView(JsonIoMixin, LoginRequiredMixin, generic.detail.SingleObjectMixin, generic.View):
     model = Pack   
     
+    can_edit = "bob"
     def get(self, request, *args, **kwargs):
         
         self.object = self.get_object()
         
-        exportData = serializers.serialize("json", [self.get_object() ])
-        
         return render(request, 'manager/pack_export.html', {
             'pack': self.object,
-            'exportedJson': exportData,
+            'exportedJson': self.export_json(),
         })
         
          

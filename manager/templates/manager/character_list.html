@@ -1,37 +1,46 @@
 {% extends "base.html" %}
+
 {% load humanize %}
  
 {% block content %}
-
-{% if character_list %}
-    
-        <div class="panel panel-default">
-		<div class="panel-heading">
-			<h3>Characters:</h3>
-		</div>
-		<div class="panel-body">
-
-      <!-- Table -->
-      <table class="table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Character Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for character in character_list %}
-	        <tr>
-		        <th scope="row"><input type="checkbox" name="vehicle" value="Bike"></th>
-		        <td><a href="{{ character.get_absolute_url }}">{{ character.name }}</a></td>
-	        </tr>
-	    {% endfor %}
-        </tbody>
-      </table>
-    
-		{% else %}
-		    <p>No Characters are available.</p>
-		{% endif %}
-	</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="pull-right">
+      <a class="btn btn-primary" href="{% url 'manager:pack-create' %}"><span class="glyphicon glyphicon-plus"></span> Create</a>
+    </div>
+    <h3>Characters:</h3>
+  </div>
+  <div class="panel-body">
+  {% if character_list %}
+    <!-- Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th><a href="?order_by=name">Character Name</a></th>
+          <th><a href="?order_by=pack">Pack</a></th>
+          <th><a href="?order_by=source">Source</a></th>
+          <th><a href="?order_by=date_modified">Last Updated</a></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for character in character_list %}
+        <tr>
+          <td><a href="{{character.get_absolute_url}}">{{ character.name }}</a></td>
+          <td><a href="{{character.pack.get_absolute_url}}">{{ character.pack }}</a></td>
+          <td>{{ character.source }}</td>
+          <td>{{ character.date_modified|naturalday }}</td>
+          <td align="right">
+            <a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"></span></a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>No Characters are available.</p>
+    {% endif %}
 </div>
 {% endblock %}
+

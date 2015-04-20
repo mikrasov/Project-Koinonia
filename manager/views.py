@@ -54,15 +54,15 @@ class PackImportView(JsonIoMixin, OwnerCheckMixin, generic.detail.SingleObjectMi
         # Look up the pack
         self.object = self.get_object()
                 
-        try:
-            self.import_json(request.POST["import_data"])
-            return HttpResponseRedirect( self.object.get_absolute_url() )
-        except ValueError:
+        #try:
+        self.import_json(request.POST["import_data"])
+        return HttpResponseRedirect( self.object.get_absolute_url() )
+        #except ValueError:
             # If Invalid JSON
-            return render(request, 'manager/pack_import.html', {
-                'pack': self.object,
-                'error_message': "Invalid JSON",
-            })
+        #    return render(request, 'manager/pack_import.html', {
+        #        'pack': self.object,
+        #        'error_message': "Invalid JSON",
+        #    })
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -98,7 +98,7 @@ class CharacterDetailView(generic.DetailView):
 class CharacterUpdateView(OwnerCheckMixin, generic.UpdateView):
     model = Character
     template_name_suffix = '_edit'
-    fields = ['name', 'source', 'bio', 'gmnotes']
+    fields = ['name', 'source', 'token', 'avatar', 'bio', 'gmnotes']
     
     def get_success_url(self):
         return self.object.get_absolute_url()

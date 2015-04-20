@@ -1,4 +1,5 @@
 {% extends "manager/character.html" %}
+{% load form_extras %}
 
 {% block title %}Editing Character:  {{ character.name }}{% endblock %}
 
@@ -8,17 +9,42 @@
 {% endblock %}
 
 {% block details %}	
-	<div class="col-xs-2"><strong>Name:</strong></div>	
-	<div class="col-xs-10">{{ form.name }}</div>
+	<div class="form-group">
+		{{ form.name.label_tag }}
+		{{ form.name.errors }}
+		{{ form.name | addatrr:"class=form-control"}}
+	</div>
 	
-	<div class="col-xs-2"><strong>Source:</strong></div>
-	<div class="col-xs-10">{{ form.source }}</div>
+	<div class="form-group">
+		{{ form.source.label_tag }}
+		{{ form.source.errors }}
+		{{ form.source | addatrr:"class=form-control"}}
+	</div>
+	
+	<div class="form-group">
+		{{ form.avatar.label_tag }}
+		{{ form.avatar.errors }}
+		{{ form.avatar | addatrr:"class=form-control"}}
+	</div>
+	
+	<div class="form-group">
+		{{ form.token.label_tag }}
+		{{ form.token.errors }}
+		{{ form.token | addatrr:"class=form-control"}}
+	</div>
+		
 {% endblock %}
 
 {% block bio %}
-	<p>{{ form.bio }}</p>
+	<div class="form-group">
+	{{ form.bio.errors }}
+	{{ form.bio | addatrr:"class=form-control" }}
+	</div>
 {% endblock %}
 
 {% block notes %}
-	<p>{{ form.gmnotes }}</p>
+	<div class="form-group">
+	{{ form.gmnotes.errors }}
+	{{ form.gmnotes | addatrr:"class=form-control" }}
+	</div>
 {% endblock %}

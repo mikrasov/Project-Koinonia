@@ -17,24 +17,7 @@
 		</div>
 	</div>
 			
-	<div class="panel panel-default">
-		<div class="panel-heading" data-toggle="collapse" data-target="#character_abilities_block">
-			<h3><span class="glyphicon glyphicon-flash"></span> Abilities:</h3>
-		</div>
-		<div class="panel-body panel-collapse collapse in" id="character_abilities_block">
-			{% block abilities %}{% endblock %}
-		</div>
-	</div>
-	
-	<div class="panel panel-default">
-		<div class="panel-heading" data-toggle="collapse" data-target="#character_attributes_block">
-			<h3><span class="glyphicon glyphicon-th-list"></span> Attributes:</h3>
-		</div>
-		<div class="panel-body panel-collapse collapse in" id="character_attributes_block">
-			{% block attributes %}{% endblock %}
-		</div>
-	</div>
-	
+	{% if character.bio or form.bio %}
 	<div class="panel panel-default">
 		<div class="panel-heading"  data-toggle="collapse" data-target="#character_bio_block">
 			<h3><span class="glyphicon glyphicon-user"></span> Bio:</h3>
@@ -43,7 +26,31 @@
 			{% block bio %}{% endblock %}
 		</div>
 	</div>
+	{% endif %}
+	
+	{% if character.ability_set.all %}
+	<div class="panel panel-default">
+		<div class="panel-heading" data-toggle="collapse" data-target="#character_abilities_block">
+			<h3><span class="glyphicon glyphicon-flash"></span> Abilities:</h3>
+		</div>
+		<div class="panel-body panel-collapse collapse in" id="character_abilities_block">
+			{% block abilities %}{% endblock %}
+		</div>
+	</div>
+	{% endif %}
+	
+	{% if character.attribute_set.all %}
+	<div class="panel panel-default">
+		<div class="panel-heading" data-toggle="collapse" data-target="#character_attributes_block">
+			<h3><span class="glyphicon glyphicon-th-list"></span> Attributes:</h3>
+		</div>
+		<div class="panel-body panel-collapse collapse in" id="character_attributes_block">
+			{% block attributes %}{% endblock %}
+		</div>
+	</div>
+	{% endif %}
 
+	{% if character.gmnotes or form.gmnotes %}
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_notes_block">
 			<h3><span class="glyphicon glyphicon-file"></span> GM Notes:</h3>
@@ -52,6 +59,7 @@
 			{% block notes %}{% endblock %}
 		</div>
 	</div>
+	{% endif %}
 	
 	</form>
 	

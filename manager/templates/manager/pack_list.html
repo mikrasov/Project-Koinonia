@@ -19,7 +19,6 @@
           <th><a href="?order_by=system">System</a></th>
           <th><a href="?order_by=owner">Published By</a></th>
           <th><a href="?order_by=date_modified">Last Updated</a></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -29,10 +28,6 @@
           <td>{{ pack.system }}</td>
           <td>{{ pack.owner }}</td>
           <td>{{ pack.date_modified|naturalday }}</td>
-          <td align="right">
-            <a class="btn btn-danger" href="{{pack.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"></span></a>
-            <a class="btn btn-primary" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"></span></a>
-          </td>
         </tr>
       {% endfor %}
       </tbody>

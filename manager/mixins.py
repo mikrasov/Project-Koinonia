@@ -1,4 +1,4 @@
-import json
+import json, urllib
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -25,7 +25,7 @@ class OwnerCheckMixin(object):
 
 class JsonIoMixin(object):
     
-    IO_VERSION = "1.0"
+    IO_VERSION = 1.01
 
     def import_json(self, postData):
         data = json.loads(postData)
@@ -46,6 +46,12 @@ class JsonIoMixin(object):
             importedChar.name = character["name"]
             importedChar.slug = slugify(character["name"])
                 
+            importedChar.avatar = character["avatar"] or ""
+            importedChar.token = character.get("token") or ""
+            
+            importedChar.bio = urllib.parse.unquote(character["bio"] or "")
+            importedChar.gmnotes = urllib.parse.unquote(character["gmnotes"] or "")
+            
             if existingCharacters.filter(name=character["name"]).exists():
                 charactersExisting.append(importedChar)
                 character["alreadyExists"] = True

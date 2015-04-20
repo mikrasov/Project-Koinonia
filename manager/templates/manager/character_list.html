@@ -20,7 +20,6 @@
           <th><a href="?order_by=pack">Pack</a></th>
           <th><a href="?order_by=source">Source</a></th>
           <th><a href="?order_by=date_modified">Last Updated</a></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -30,10 +29,6 @@
           <td><a href="{{character.pack.get_absolute_url}}">{{ character.pack }}</a></td>
           <td>{{ character.source }}</td>
           <td>{{ character.date_modified|naturalday }}</td>
-          <td align="right">
-            <a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"></span></a>
-            <a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"></span></a>
-          </td>
         </tr>
       {% endfor %}
       </tbody>

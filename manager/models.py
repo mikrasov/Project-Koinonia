@@ -44,6 +44,8 @@ class Character(models.Model):
     slug = models.SlugField(default='character') 
     
     name = models.CharField(max_length=200)
+    avatar = models.URLField(blank=True)
+    token = models.URLField(blank=True)
     source = models.CharField(max_length=200, blank=True)
     bio = models.TextField(blank=True)
     gmnotes = models.TextField(blank=True)

@@ -6,7 +6,8 @@ from django.views import generic
 from django.utils.text import slugify
 
 from manager.models import Pack, Character
-from manager.mixins import JsonIoMixin, OwnerCheckMixin, LoginRequiredMixin
+from manager.forms import PackForm, CharacterForm, CharacterNotesForm, AbilityFormSet, AttributeFormSet, PackExportForm
+from manager.mixins import JsonIoMixin, PermissionViewMixin, PermissionEditMixin, LoginRequiredMixin
 
 # Pack Views
 class PackListView(generic.ListView):
@@ -15,16 +16,14 @@ class PackListView(generic.ListView):
         order_by = self.request.GET.get('order_by', '-date_created')
         return Pack.objects.order_by(order_by)
 
-class PackDetailView(generic.DetailView):
+class PackDetailView(PermissionViewMixin, generic.DetailView):
     model = Pack
 
 class PackCreateView(LoginRequiredMixin, generic.CreateView):
     model = Pack
+    form_class = PackForm
     success_url = '../'
     template_name_suffix = '_edit'
-    fields = ['name', 'system']
-    
-    can_edit = "bob"
     
     def form_valid(self, form):
         form.instance.owner = self.request.user
@@ -34,10 +33,10 @@ class PackCreateView(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-class PackUpdateView(OwnerCheckMixin, generic.UpdateView):
+class PackUpdateView(PermissionEditMixin, generic.UpdateView):
     model = Pack
+    form_class = PackForm
     template_name_suffix = '_edit'
-    fields = ['name', 'system']
     
     def form_valid(self, form):
         form.instance.slug = slugify(form.instance.name)
@@ -45,8 +44,8 @@ class PackUpdateView(OwnerCheckMixin, generic.UpdateView):
     
     def get_success_url(self):
         return self.object.get_absolute_url()
-
-class PackImportView(JsonIoMixin, OwnerCheckMixin, generic.detail.SingleObjectMixin, generic.View):
+    
+class PackImportView(PermissionEditMixin, JsonIoMixin, generic.detail.SingleObjectMixin, generic.View):
     model = Pack
     template_name_suffix = '_import'
 
@@ -70,21 +69,22 @@ class PackImportView(JsonIoMixin, OwnerCheckMixin, generic.detail.SingleObjectMi
             'pack': self.object,
         })
         
-class PackExportView(JsonIoMixin, LoginRequiredMixin, generic.detail.SingleObjectMixin, generic.View):
-    model = Pack   
+class PackExportView(PermissionViewMixin, JsonIoMixin, generic.detail.SingleObjectMixin, generic.FormView):
+    template_name = 'pack_export.html'
+    model = Pack
+    form_class = PackExportForm
+    success_url = '/thanks/'
     
-    can_edit = "bob"
     def get(self, request, *args, **kwargs):
         
         self.object = self.get_object()
         
         return render(request, 'manager/pack_export.html', {
             'pack': self.object,
-            'exportedJson': self.export_json(),
+            #'exportedJson': self.export_json(),
         })
-        
          
-class PackDeleteView(OwnerCheckMixin, generic.DeleteView):
+class PackDeleteView(PermissionEditMixin, generic.DeleteView):
     model = Pack
     success_url = '../../../'
         
@@ -92,18 +92,118 @@ class PackDeleteView(OwnerCheckMixin, generic.DeleteView):
 class CharacterListView(generic.ListView):
     model = Character
     
-class CharacterDetailView(generic.DetailView):
+class CharacterDetailView(PermissionViewMixin, generic.DetailView):
     model = Character
 
-class CharacterUpdateView(OwnerCheckMixin, generic.UpdateView):
+class CharacterCreateView(LoginRequiredMixin, generic.CreateView):
     model = Character
+    form_class = CharacterForm
+    success_url = '../'
     template_name_suffix = '_edit'
-    fields = ['name', 'source', 'token', 'avatar', 'bio', 'gmnotes']
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+    
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        notes_form = CharacterNotesForm()
+        ability_form = AbilityFormSet()
+        attribute_form = AttributeFormSet()
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  notes_form = notes_form,
+                                  ability_form=ability_form,
+                                  attribute_form=attribute_form))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        notes_form = CharacterNotesForm(self.request.POST)
+        ability_form = AbilityFormSet(self.request.POST)
+        attribute_form = AttributeFormSet(self.request.POST)
+        if (form.is_valid() and  notes_form.is_valid() and ability_form.is_valid() and
+            ability_form.is_valid()):
+            return self.form_valid(form, notes_form, ability_form, ability_form)
+        else:
+            return self.form_invalid(form, notes_form,  attribute_form, attribute_form)
+        
+    def form_valid(self, form, notes_form, ability_form, attribute_form):
+        form.instance.owner = self.request.user
+        form.instance.slug = slugify(form.instance.name)
+        self.object = form.save()
+        notes_form.instance = self.object
+        notes_form.save()
+        ability_form.instance = self.object
+        ability_form.save()
+        attribute_form.instance = self.object
+        attribute_form.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def form_invalid(self, form, notes_form, ability_form, attribute_form):
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  notes_form = notes_form,
+                                  ability_form=ability_form,
+                                  attribute_form=attribute_form))
+        
+    
+    
+class CharacterUpdateView(PermissionEditMixin, generic.UpdateView):
+    model = Character
+    form_class = CharacterForm
+    template_name_suffix = '_edit'
     
     def get_success_url(self):
         return self.object.get_absolute_url()
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        notes_form = CharacterNotesForm(instance=self.object)
+        ability_form = AbilityFormSet(instance=self.object)
+        attribute_form = AttributeFormSet(instance=self.object)
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  notes_form = notes_form,
+                                  ability_form=ability_form,
+                                  attribute_form=attribute_form))
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        notes_form = CharacterNotesForm(self.request.POST)
+        ability_form = AbilityFormSet(self.request.POST)
+        attribute_form = AttributeFormSet(self.request.POST)
+        if (form.is_valid() and  notes_form.is_valid() and ability_form.is_valid() and
+            ability_form.is_valid()):
+            return self.form_valid(form, notes_form, ability_form, ability_form)
+        else:
+            return self.form_invalid(form, notes_form, attribute_form, attribute_form)
+    
+    def form_valid(self, form, notes_form, ability_form, attribute_form):
+        form.instance.owner = self.request.user
+        form.instance.slug = slugify(form.instance.name)
+        self.object = form.save()
+        notes_form.instance = self.object
+        notes_form.save()
+        ability_form.instance = self.object
+        ability_form.save()
+        attribute_form.instance = self.object
+        attribute_form.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+    def form_invalid(self, form, notes_form, ability_form, attribute_form):
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  notes_form = notes_form,
+                                  ability_form=ability_form,
+                                  attribute_form=attribute_form))
 
-class CharacterDeleteView(OwnerCheckMixin, generic.DeleteView):
+class CharacterDeleteView(PermissionEditMixin, generic.DeleteView):
     model = Character
     success_url = '../../../'

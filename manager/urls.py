@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^pack/(?P<slug>[-\w\d]+),(?P<pk>\d+)/export/$', views.PackExportView.as_view(), name='pack-export'),    
     
     url(r'^character/$', views.CharacterListView.as_view(), name='character-list'),
+    url(r'^character/create/$', views.CharacterCreateView.as_view(), name='character-create'), 
     url(r'^character/(?P<slug>[-\w\d]+),(?P<pk>\d+)/$', views.CharacterDetailView.as_view(), name='character-detail'),
     url(r'^character/(?P<slug>[-\w\d]+),(?P<pk>\d+)/update/$', views.CharacterUpdateView.as_view(), name='character-update'),
     url(r'^character/(?P<slug>[-\w\d]+),(?P<pk>\d+)/delete/$', views.CharacterDeleteView.as_view(), name='character-delete'),

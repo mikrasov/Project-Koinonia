@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 # Create your models here.
 class Pack(models.Model):
     viewKey = models.UUIDField(unique=True, default=uuid.uuid4)
+    isPublic = models.BooleanField(default=True)
     
     owner = models.ForeignKey(User)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -35,7 +36,15 @@ class Pack(models.Model):
     
     def get_owner(self):
         return self.owner
-           
+    
+    def is_public(self):
+        return self.isPublic     
+    
+    def can_edit(self, user):
+        return user.is_authenticated() and self.get_owner().username == user.username
+        
+    def can_view(self, user):
+        return self.is_public() or self.can_edit(user)  
 
 class Character(models.Model):
     pack = models.ForeignKey(Pack)
@@ -70,6 +79,15 @@ class Character(models.Model):
 
     def get_owner(self):
         return self.pack.owner
+    
+    def is_public(self):
+        return self.pack.isPublic      
+    
+    def can_edit(self, user):
+        return user.is_authenticated() and self.get_owner().username == user.username
+        
+    def can_view(self, user):
+        return self.is_public() or self.can_edit(user)  
     
 class Ability(models.Model):
     character = models.ForeignKey(Character)

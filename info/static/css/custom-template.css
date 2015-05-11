@@ -4,3 +4,10 @@ body {
 .main-content {
   padding: 40px 15px;
 }
+
+
+.row-even {
+}
+.row-odd {
+background-color:#f9f9f9;
+}

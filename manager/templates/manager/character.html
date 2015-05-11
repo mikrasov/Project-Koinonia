@@ -8,56 +8,69 @@
 		<h1>{% block title %}{% endblock %}</h1>
 	</div>
 	
-	<div class="panel panel-default">
+	<div class="panel panel-default" id="details-block">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_detail_block">
             <h3><span class="glyphicon glyphicon-list-alt"></span> Details:</h3>
         </div>
 		<div class="panel-body panel-collapse collapse in" id="character_detail_block">
 			{% block details %}{% endblock %}
 		</div>
+		<div class="panel-footer"></div>
 	</div>
 			
-	{% if character.bio or form.bio %}
-	<div class="panel panel-default">
+	{% if character.bio or notes_form %}
+	<div class="panel panel-default" id="bio-block">
 		<div class="panel-heading"  data-toggle="collapse" data-target="#character_bio_block">
 			<h3><span class="glyphicon glyphicon-user"></span> Bio:</h3>
 		</div>
 		<div class="panel-body panel-collapse collapse in" id="character_bio_block">
 			{% block bio %}{% endblock %}
 		</div>
+		<div class="panel-footer"></div>
 	</div>
 	{% endif %}
 	
-	{% if character.ability_set.all %}
-	<div class="panel panel-default">
+	{% if character.ability_set.all or ability_form %}
+	<div class="panel panel-default" id="ability-block">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_abilities_block">
+			<div class="actions pull-right">{% block abilities_actions %}{% endblock %}</div>
 			<h3><span class="glyphicon glyphicon-flash"></span> Abilities:</h3>
 		</div>
 		<div class="panel-body panel-collapse collapse in" id="character_abilities_block">
 			{% block abilities %}{% endblock %}
 		</div>
+		<div class="panel-footer">
+			<div class="actions pull-right"></div>
+			<br><br>
+		</div>
 	</div>
 	{% endif %}
 	
-	{% if character.attribute_set.all %}
-	<div class="panel panel-default">
+	{% if character.attribute_set.all or attribute_form %}
+	<div class="panel panel-default" id="attributes-block">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_attributes_block">
+			<div class="actions pull-right">{% block attributes_actions %}{% endblock %}</div>
 			<h3><span class="glyphicon glyphicon-th-list"></span> Attributes:</h3>
 		</div>
 		<div class="panel-body panel-collapse collapse in" id="character_attributes_block">
 			{% block attributes %}{% endblock %}
 		</div>
+		<div class="panel-footer">
+			<div class="actions pull-right"></div>
+			<br><br>
+		</div>
 	</div>
 	{% endif %}
 
-	{% if character.gmnotes or form.gmnotes %}
-	<div class="panel panel-default">
+	{% if character.gmnotes or notes_form %}
+	<div class="panel panel-default" id="notes-block">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_notes_block">
 			<h3><span class="glyphicon glyphicon-file"></span> GM Notes:</h3>
 		</div>
 		<div class="panel-body panel-collapse collapse in" id="character_notes_block">
 			{% block notes %}{% endblock %}
 		</div>
+		<div class="panel-footer"></div>
 	</div>
 	{% endif %}
 	

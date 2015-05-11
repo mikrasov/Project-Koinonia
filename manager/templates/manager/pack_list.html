@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+
 {% load humanize %}
+{% load permissions %}
  
 {% block content %}
 <div class="panel panel-default">
@@ -9,6 +11,7 @@
     </div>
     <h3>Packs:</h3>
   </div>
+  
   <div class="panel-body">
   {% if pack_list %}
     <!-- Table -->
@@ -19,15 +22,21 @@
           <th><a href="?order_by=system">System</a></th>
           <th><a href="?order_by=owner">Published By</a></th>
           <th><a href="?order_by=date_modified">Last Updated</a></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
-      {% for pack in pack_list %}
+      {% for pack in user|canView:pack_list %}
         <tr>
           <td><a href="{{pack.get_absolute_url}}">{{ pack.name }}</a></td>
           <td>{{ pack.system }}</td>
           <td>{{ pack.owner }}</td>
           <td>{{ pack.date_modified|naturalday }}</td>
+          <td>
+          	{% if user|canEdit:pack%}
+          		<a class="btn btn-warning" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+         	{% endif %}
+          </td>
         </tr>
       {% endfor %}
       </tbody>

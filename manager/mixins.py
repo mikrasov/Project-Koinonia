@@ -1,8 +1,8 @@
 import json, urllib
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.utils.text import slugify
+from django.http import HttpResponseRedirect
 from manager.models import Pack, Character, Ability, Attribute
 
 #Generic Mixins
@@ -11,20 +11,21 @@ class LoginRequiredMixin(object):
     def as_view(cls, **initkwargs):
         view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
         return login_required(view)
-
     
-class OwnerCheckMixin(object):
 
-    def check_owner(self, request):
-        return self.get_object().get_owner().username == request.user.username
-        
+class PermissionEditMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated() or not self.check_owner(request):
-            return reverse('login')
-        return super(OwnerCheckMixin, self).dispatch(request, *args, **kwargs)
+        if not self.get_object().can_edit(request.user):
+            return HttpResponseRedirect('/login')
+        return super(PermissionEditMixin, self).dispatch(request, *args, **kwargs)
 
-class JsonIoMixin(object):
-    
+class PermissionViewMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if not self.get_object().can_view(request.user):
+            return HttpResponseRedirect('/login')
+        return super(PermissionViewMixin, self).dispatch(request, *args, **kwargs)
+        
+class JsonIoMixin(object):    
     IO_VERSION = 1.01
 
     def import_json(self, postData):

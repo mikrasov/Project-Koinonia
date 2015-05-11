@@ -1,19 +1,14 @@
-{% extends "base.html" %}
+{% extends "manager/pack.html" %}
+{% load humanize %}
+{% load form_extras %}
 
-{% block content %}
+{% block title %}Editing Pack: {{ pack.name }}{% endblock %}
+	
+{% block actions %}
+  <a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
+{% endblock %}
 
-	<div class="page-header">
-		<div class="pull-right">
-			<a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
-		</div>
-		<h1>Exporting Pack: {{ pack.name }}</h1>
-	</div>
-	
-	<div class="panel panel-default">
-		<div class="panel-heading"><h3>Copy to Roll 20 Import Script:</h3></div>
-		<div class="panel-body">
-			<textarea class="form-control" rows="20">{{exportedJson}}</textarea>
-		</div>
-	</div>
-	
-{% endblock %} 
+{% block details %}		
+		{{ form }}
+{% endblock %}
+

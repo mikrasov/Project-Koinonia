@@ -9,42 +9,111 @@
 {% endblock %}
 
 {% block details %}	
+
+	{% for field in form %}
 	<div class="form-group">
-		{{ form.name.label_tag }}
-		{{ form.name.errors }}
-		{{ form.name | addatrr:"class=form-control"}}
+		{{ field.label_tag }}
+		{{ field.errors }}
+		{{ field | addatrr:"class=form-control"}}
 	</div>
-	
-	<div class="form-group">
-		{{ form.source.label_tag }}
-		{{ form.source.errors }}
-		{{ form.source | addatrr:"class=form-control"}}
-	</div>
-	
-	<div class="form-group">
-		{{ form.avatar.label_tag }}
-		{{ form.avatar.errors }}
-		{{ form.avatar | addatrr:"class=form-control"}}
-	</div>
-	
-	<div class="form-group">
-		{{ form.token.label_tag }}
-		{{ form.token.errors }}
-		{{ form.token | addatrr:"class=form-control"}}
-	</div>
+	{% endfor %}
 		
 {% endblock %}
 
 {% block bio %}
 	<div class="form-group">
-	{{ form.bio.errors }}
-	{{ form.bio | addatrr:"class=form-control" }}
+	{{ notes_form.bio.errors }}
+	{{ notes_form.bio | addatrr:"class=form-control" }}
 	</div>
+{% endblock %}
+
+
+{% block abilities %}
+    {{ ability_form.management_form }}
+    {{ ability_form.non_form_errors }}
+    {% for form in ability_form %}
+        {{ form.id }}
+        <div class="row inline {% cycle 'row-even' 'row-odd ' %} {{ ability_form.prefix }}">
+         	<div class="col-xs-10">
+	         	<div class="form-group col-xs-10">
+	            {{ form.name.errors }}
+	            {{ form.name.label_tag }}
+	            {{ form.name| addatrr:"class=form-control" }}
+	            </div>
+	            <div class="form-group col-xs-2">
+	            {{ form.istokenaction.errors }}
+	            {{ form.istokenaction.label_tag }}
+	            {{ form.istokenaction| addatrr:"class=form-control"}}
+	            </div>
+	            <div class="form-group col-xs-12">
+	            {{ form.action.errors }}
+	            {{ form.action.label_tag }}
+	            {{ form.action| addatrr:"class=form-control" }}
+	            </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block attributes %}
+	<fieldset>
+    {{ attribute_form.management_form }}
+    {{ attribute_form.non_form_errors }}
+    {% for form in attribute_form %}
+        {{ form.id }}
+        <div class="row inline {% cycle 'row-even' 'row-odd ' %} {{ attribute_form.prefix }}">
+        	<div class="form-group col-xs-4">
+            {{ form.name.errors }}
+            {{ form.name.label_tag }}
+            {{ form.name| addatrr:"class=form-control" }}
+            </div> 
+            <div class="form-group col-xs-4">
+            {{ form.current.errors }}
+            {{ form.current.label_tag }}
+            {{ form.current| addatrr:"class=form-control" }}
+            </div> 
+            <div class="form-group col-xs-2">
+            {{ form.max.errors }}
+            {{ form.max.label_tag }}
+            {{ form.max| addatrr:"class=form-control" }}
+            </div> 
+        </div>
+    {% endfor %}
+    </fieldset>
 {% endblock %}
 
 {% block notes %}
 	<div class="form-group">
-	{{ form.gmnotes.errors }}
-	{{ form.gmnotes | addatrr:"class=form-control" }}
+	{{ notes_form.gmnotes.errors }}
+	{{ notes_form.gmnotes | addatrr:"class=form-control" }}
 	</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    $(function() {
+        $(".inline.{{ ability_form.prefix }}").formset({
+            prefix: "{{ ability_form.prefix }}",
+            deleteText:" Remove",
+            deleteWrap:"<div class='col-xs-2'></div>",
+            deleteCssClass:"btn btn-danger glyphicon glyphicon-remove",
+            addText:" Add",
+            addCssClass:"btn btn-primary glyphicon glyphicon-plus",
+            addInsert: function($$, addButton) {
+            	$("#ability-block .actions").append(addButton);
+            },
+        })
+        $(".inline.{{ attribute_form.prefix }}").formset({
+            prefix: "{{ attribute_form.prefix }}",
+            deleteText:' Remove',
+            deleteWrap:"<div class='col-xs-2'></div>",
+            deleteCssClass:"btn btn-danger glyphicon glyphicon-remove",
+            addText:" Add",
+            addCssClass:"btn btn-primary glyphicon glyphicon-plus",
+            addInsert: function($$, addButton) {
+            	$("#attributes-block .actions").append(addButton);
+            },
+        })
+    })
+</script>
 {% endblock %}

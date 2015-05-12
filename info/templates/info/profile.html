@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}  
+{{ object.provider }}  
+ <section style="padding-bottom: 50px; padding-top: 50px;">
+    <div class="row">
+        <div class="col-xs-4">
+            <img src="{{ object.userprofile.getGravatar }}size=250" class="img-rounded img-responsive" />
+
+            Linked Accounts:
+            <ul>
+            	{% if object.userprofile.roll20_username %}
+            		<li><a href="https://app.roll20.net/users/{{ object.userprofile.roll20_username }}">Roll20</a></li>
+            	{% endif %}
+            	{% if object.userprofile.website %}
+            		<li><a href="{{ object.userprofile.website }}">Website</a></li>
+            	{% endif %}
+            	{% if object.email %}
+            		<li><a href="mailto:{{ object.email }}">Email</a></li>
+            	{% endif %}
+            </ul>
+        </div>
+        <div class="col-xs-8">
+            <div>
+                <h2>{{ object.username }}</h2>
+                <p>{{ object.userprofile.about }}</p>
+            </div>
+            
+        </div>
+    </div>
+    <!-- ROW END -->
+
+</section>
+<!-- SECTION END -->
+        
+{% endblock %} 

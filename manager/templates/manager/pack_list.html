@@ -30,7 +30,11 @@
         <tr>
           <td><a href="{{pack.get_absolute_url}}">{{ pack.name }}</a></td>
           <td>{{ pack.system }}</td>
-          <td>{{ pack.owner }}</td>
+          <td>
+	          <a href="{{ pack.owner.userprofile.get_absolute_url}}">
+	          	{{ pack.owner }}
+	          </a>
+          </td>
           <td>{{ pack.date_modified|naturalday }}</td>
           <td>
           	{% if user|canEdit:pack%}

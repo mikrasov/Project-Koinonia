@@ -28,11 +28,29 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'vo9QuP0oam-pvm5CqMlNtidJ'
 SOCIAL_AUTH_TWITTER_KEY = 'kk7rrMKB0TmFHYDDVBQaDRnHw'
 SOCIAL_AUTH_TWITTER_SECRET = 'fgX6oX1KIY2zChfqI6RYsAceyEQZ70DhxFWJWWDz8o36g06MDb'
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/plus.login'
+]
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    #'social.pipeline.social_auth.associate_by_email',  # <--- enable this one
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
+)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 ALLOWED_HOSTS = []
 
 

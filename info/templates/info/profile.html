@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
+{% block title %}Profile: {{object.username}}{% endblock %}
+
+{% load humanize %}
+{% load permissions %}
+
+
 {% block content %}  
 {{ object.provider }}  
- <section style="padding-bottom: 50px; padding-top: 50px;">
+ <section class="jumbotron">
     <div class="row">
         <div class="col-xs-4">
             <img src="{{ object.userprofile.getGravatar }}size=250" class="img-rounded img-responsive" />
@@ -29,8 +35,45 @@
         </div>
     </div>
     <!-- ROW END -->
-
 </section>
+	<div class="panel panel-default">
+		<div class="panel-heading" >
+            <h3>Packs:</h3>
+        </div>
+		<div class="panel-body" >
+		{% if user.pack_set %}
+	      	<table class="table">
+	      <thead>
+	        <tr>
+	          <th><a href="?order_by=name">Pack Name</a></th>
+	          <th><a href="?order_by=system">System</a></th>
+	          <th><a href="?order_by=date_modified">Last Updated</a></th>
+	          <th></th>
+	        </tr>
+	      </thead>
+	      <tbody>
+	      {% for pack in user|canView:user.pack_set.all %}
+	        <tr>
+	          <td><a href="{{pack.get_absolute_url}}">{{ pack.name }}</a></td>
+	          <td>{{ pack.system }}</td>
+	          <td>{{ pack.date_modified|naturalday }}</td>
+	          <td>
+	          	{% if user|canEdit:pack%}
+	          		<a class="btn btn-warning" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	         	{% endif %}
+	          </td>
+	        </tr>
+	      {% endfor %}
+	      </tbody>
+	    </table>
+	    {% else %}
+	      <p>No Packs are available.</p>
+	    {% endif %}
+      
+		</div>
+		<div class="panel-footer"></div>
+	</div>
+    
 <!-- SECTION END -->
         
 {% endblock %} 

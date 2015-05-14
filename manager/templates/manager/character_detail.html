@@ -1,10 +1,16 @@
 {% extends "manager/character.html" %}
 
+{% load permissions %}
+
 {% block title %}{{ character.name }}{% endblock %}
 	
 {% block actions %}
-	<a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"> Delete</span></a>
-	<a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	<a class="btn btn-primary" href="{{character.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>
+	
+	{% if user|canEdit:character %}
+	   <a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"> Delete</span></a>
+	   <a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	{% endif %}
 {% endblock %}
 
 {% block details %}	

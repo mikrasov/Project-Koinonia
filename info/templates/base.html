@@ -72,6 +72,7 @@
 	            <li><a href="/admin/">Admin</a></li>
 			 {% endif %}
 	       	 <li><a href="{% url 'info:index' %}">How-To</a></li>
+	       	 <li><a target="_blank" href="https://github.com/mikrasov/Roll20-Scripts/blob/master/Character_IO.js">Download Script</a></li>
 	       </ul>
 	       
 	       <ul class="nav  navbar-nav navbar-right">
@@ -111,7 +112,7 @@
     
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    
+    <script src="{% static 'js/holder.min.js' %}"></script>
     <script src="{% static 'js/jquery.formset.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block scripts %}{% endblock %}

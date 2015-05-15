@@ -46,9 +46,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False #True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = False #True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 ALLOWED_HOSTS = []
@@ -63,7 +63,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django_bootstrap_breadcrumbs',
+    #'django_bootstrap_breadcrumbs',
     'social.apps.django_app.default',
     'debug_toolbar',
     'info',

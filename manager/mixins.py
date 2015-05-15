@@ -83,31 +83,38 @@ class JsonIoMixin(object):
         Ability.objects.bulk_create(abilityToAdd)
         Attribute.objects.bulk_create(attributeToAdd)
 
-    def export_json(self):
+    def export_json(self, packChars, exportAttributes, exportedAblities, exportBios, exportNotes):
         exportObj = {}
         exportObj["version"] = JsonIoMixin.IO_VERSION
         exportObj["characters"] = []
         
-        packChars = Character.objects.filter(pack=self.object)
         for character in packChars:    
             exportChar = {}
             exportChar["name"] = character.name
             
-            exportChar["abilities"] = []
-            for ability in Ability.objects.filter(character=character):
-                exportedAblity = {}
-                exportedAblity["name"] = ability.name
-                exportedAblity["action"] = ability.action
-                exportedAblity["istokenaction"] = ability.istokenaction
-                exportChar["abilities"].append(exportedAblity)
+            if exportBios:
+                exportChar["bio"] = character.bio
             
-            exportChar["attributes"] = []
-            for attribute in Attribute.objects.filter(character=character):
-                exportedAttribute = {}
-                exportedAttribute["name"] = attribute.name
-                exportedAttribute["current"] = attribute.current
-                exportedAttribute["max"] = attribute.max
-                exportChar["attributes"].append(exportedAttribute)
+            if exportNotes:
+                exportChar["gmnotes"] = character.gmnotes
+            
+            exportChar["abilities"] = []
+            if exportedAblities:
+                for ability in Ability.objects.filter(character=character):
+                    exportedAblity = {}
+                    exportedAblity["name"] = ability.name
+                    exportedAblity["action"] = ability.action
+                    exportedAblity["istokenaction"] = ability.istokenaction
+                    exportChar["abilities"].append(exportedAblity)
                 
+            exportChar["attributes"] = []
+            if exportAttributes:
+                for attribute in Attribute.objects.filter(character=character):
+                    exportedAttribute = {}
+                    exportedAttribute["name"] = attribute.name
+                    exportedAttribute["current"] = attribute.current
+                    exportedAttribute["max"] = attribute.max
+                    exportChar["attributes"].append(exportedAttribute)
+                    
             exportObj["characters"].append(exportChar)
         return json.dumps(exportObj);

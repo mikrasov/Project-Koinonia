@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
+{% block title %}Exporting{% endblock %}
+
 {% block content %}
 
 	<div class="page-header">
-		<div class="pull-right">
-			<a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
-		</div>
-		<h1>Exporting Pack: {{ pack.name }}</h1>
+		<h1>Exporting</h1>
 	</div>
 	
 	<div class="panel panel-default">
@@ -16,4 +15,29 @@
 		</div>
 	</div>
 	
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3>Images:</h3></div>
+		<div class="panel-body">
+		{% for character in character_list %}
+			<div class="col-xs-4">
+				<div class="row">
+				{% if character.avatar %}
+					<div class="col-xs-6">
+						<img src="{{ character.avatar }}"  class="img-responsive" style="max-height: 75px;" alt="Avatar">
+					</div>
+				{% endif %}
+				
+				{% if character.token %}
+					<div class="col-xs-6">
+						<img src="{{ character.token }}"  class="img-responsive" style="max-height: 75px;" alt="Token">	
+					</div>
+				{% endif %}	
+				</div>
+				<div class="row text-center"><h5>{{character.name}}</h5></div>
+			</div>
+		  {% endfor %}
+		  
+		  </div>
+		</div>
+	</div>
 {% endblock %} 

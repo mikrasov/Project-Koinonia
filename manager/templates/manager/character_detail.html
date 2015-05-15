@@ -2,8 +2,9 @@
 
 {% load permissions %}
 
-{% block title %}{{ character.name }}{% endblock %}
-	
+{% block title %}{{ character.pack.name }}-{{ character.name }}{% endblock %}
+{% block heading %}{{ character.name }}{% endblock %}
+		
 {% block actions %}
 	<a class="btn btn-primary" href="{{character.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>
 	

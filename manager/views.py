@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 from django.views import generic
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 from manager.models import Pack, Character
 from manager.forms import PackForm, CharacterForm, CharacterNotesForm, AbilityFormSet, AttributeFormSet, PackExportForm
@@ -67,28 +68,22 @@ class PackImportView(PermissionEditMixin, JsonIoMixin, generic.detail.SingleObje
             'pack': self.object,
         })
         
-class PackExportView(PermissionViewMixin, JsonIoMixin, generic.detail.SingleObjectMixin, generic.FormView):
+class PackExportView(PermissionViewMixin, generic.detail.SingleObjectMixin, generic.View):
     template_name = 'pack_export.html'
     model = Pack
-    form_class = PackExportForm
-    success_url = '/thanks/'
-    
+
     def get(self, request, *args, **kwargs):
-        
-        self.object = self.get_object()
-        
         return render(request, 'manager/pack_export.html', {
-            'pack': self.object,
-            #'exportedJson': self.export_json(),
+            'title': self.get_object().name,
+            'form_action': reverse("manager:export"),
+            'character_list': self.get_object().character_set.order_by('name'),
         })
-         
+
 class PackDeleteView(PermissionEditMixin, generic.DeleteView):
     model = Pack
     success_url = '../../../'
         
 # Character views
-class CharacterListView(generic.ListView):
-    model = Character
     
 class CharacterDetailView(PermissionViewMixin, generic.DetailView):
     model = Character
@@ -202,6 +197,38 @@ class CharacterUpdateView(PermissionEditMixin, generic.UpdateView):
                                   ability_form=ability_form,
                                   attribute_form=attribute_form))
 
+class CharacterExportView(PermissionViewMixin, generic.detail.SingleObjectMixin, generic.View):
+    template_name = 'pack_export.html'
+    model = Character
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'manager/pack_export.html', {
+            'title': self.get_object().name,
+            'form_action': reverse("manager:export"),
+            'character_list': [self.get_object()],
+        })
+        
 class CharacterDeleteView(PermissionEditMixin, generic.DeleteView):
     model = Character
     success_url = '../../../'
+    
+class ExportView(JsonIoMixin, generic.View):
+    template_name = 'pack_export.html'
+    
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotFound('<h1>Page was found</h1>')
+
+    def post(self, request, *args, **kwargs):
+        character_ids = request.POST.getlist("characters");
+        character_list = Character.objects.in_bulk(character_ids).values()
+        exportAttributes = request.POST.getlist("attributes")
+        exportedAblities = request.POST.getlist("abilities")
+        exportBios= request.POST.getlist("bio")
+        exportNotes= request.POST.getlist("notes")
+        export_json = self.export_json(character_list, exportAttributes, exportedAblities, exportBios, exportNotes);
+            
+        #exportAttributes, exportedAblities, exportBios, exportNotes
+        return render(request, 'manager/export.html', {
+            'exportedJson': export_json,                    
+            'character_list': character_list,
+        })

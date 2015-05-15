@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="post">{% csrf_token %}
+<form action="{% block form_action %}{% endblock %}" method="post">{% csrf_token %}
 	
 	<div class="page-header">
 		<div class="pull-right">{% block actions %}{% endblock %}</div>
-		<h1>{% block title %}{% endblock %}</h1>
+		<h1>{% block heading %}{% endblock %}</h1>
 	</div>
 	
+	{% block no_details %}	
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_detail_block">
             <h3><span class="glyphicon glyphicon-list-alt"></span> Details:</h3>
@@ -17,8 +18,8 @@
 		</div>
 		<div class="panel-footer"></div>
 	</div>
-			
-	{% if pack.character_set.all %}
+	{% endblock %} 
+		
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse" data-target="#character_characters_block">
 			<div class="actions pull-right">{% block characters_actions %}{% endblock %}</div>
@@ -29,7 +30,6 @@
 		</div>
 		<div class="panel-footer"></div>
 	</div>
-	{% endif %}
-
+	
 </form>
 {% endblock %} 

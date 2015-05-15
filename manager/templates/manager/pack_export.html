@@ -2,13 +2,42 @@
 {% load humanize %}
 {% load form_extras %}
 
-{% block title %}Editing Pack: {{ pack.name }}{% endblock %}
-	
+{% block title %}Export: {{ title }}{% endblock %}
+{% block heading %}Exporting: {{ title }}{% endblock %}
+
+{% block form_action %}{{ form_action }}{% endblock %}
+
 {% block actions %}
   <a class="btn btn-danger" href="{{ pack.get_absolute_url }}"><span class="glyphicon glyphicon-left"> Cancel</span></a>
+  <button type="submit"  class="btn btn-primary"><span class="glyphicon glyphicon-export"> Export</button>
 {% endblock %}
 
-{% block details %}		
-		{{ form }}
+{% block details %}	
+	<div class="col-xs-3"><span class="glyphicon glyphicon-th-list"></span> <strong>Attributes:</strong></div>	
+	<div class="col-xs-3"><input type="checkbox" name="attributes" value="True" checked>	</div>
+	
+	<div class="col-xs-3"><span class="glyphicon glyphicon-user"></span> <strong>Bio:</strong></div>	
+	<div class="col-xs-3"><input type="checkbox" name="bio" value="True" ></div>
+	
+	<div class="col-xs-3"><span class="glyphicon glyphicon-flash"></span> <strong>Abilities:</strong></div>
+	<div class="col-xs-3"><input type="checkbox" name="abilities" value="True" checked></div>
+	
+	<div class="col-xs-3"><span class="glyphicon glyphicon-file"></span> <strong>GM Notes:</strong></div>	
+	<div class="col-xs-3"><input type="checkbox" name="notes" value="True" ></div>
 {% endblock %}
 
+{% block characters %}	 
+
+   
+	<!-- Table -->
+    <table class="table" >
+      <tbody>
+      {% for character in character_list %}
+        <tr>
+          <td align="right"><input type="checkbox" name="characters" value="{{ character.id }}" checked></td>
+          <td><a href="{{character.get_absolute_url}}" target="_blank">{{ character.name }}</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

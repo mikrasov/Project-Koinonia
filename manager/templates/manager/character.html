@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<form action="" method="post">{% csrf_token %}
+	<form action="{% block form_action %}{% endblock %}" method="post">{% csrf_token %}
 	
 	<div class="page-header">
 		<div class="pull-right">{% block actions %}{% endblock %}</div>
-		<h1>{% block title %}{% endblock %}</h1>
+		<h1>{% block heading %}{% endblock %}</h1>
 	</div>
 	
 	<div class="panel panel-default" id="details-block">

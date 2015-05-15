@@ -77,6 +77,9 @@ class Character(models.Model):
     def get_absolute_delete_url(self):
         return reverse('manager:character-delete', kwargs={'pk': self.id, 'slug':self.slug})
 
+    def get_absolute_export_url(self):
+        return reverse('manager:character-export', kwargs={'pk': self.id, 'slug':self.slug})
+    
     def get_owner(self):
         return self.pack.owner
     

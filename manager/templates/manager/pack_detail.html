@@ -2,7 +2,8 @@
 {% load humanize %}
 
 {% block title %}{{ pack.name }}{% endblock %}
-	
+{% block heading %}{{ pack.name }}{% endblock %}
+
 {% block actions %}
 	<a class="btn btn-info" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
 	<a class="btn btn-primary" href="{{pack.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>

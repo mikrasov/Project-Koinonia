@@ -2,7 +2,8 @@
 {% load humanize %}
 {% load form_extras %}
 
-{% block title %}Editing Pack: {{ pack.name }}{% endblock %}
+{% block title %}Editing: {{ pack.name }}{% endblock %}
+{% block heading %}Editing Pack: {{ pack.name }}{% endblock %}
 	
 {% block actions %}
   {% if pack %}
@@ -12,6 +13,7 @@
     <button type="submit"  class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> Create</button>
   {% endif %}
 {% endblock %}
+
 
 {% block details %}	
 	{% for field in form %}

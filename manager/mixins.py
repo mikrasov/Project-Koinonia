@@ -15,13 +15,19 @@ class LoginRequiredMixin(object):
 
 class PermissionEditMixin(object):
     def dispatch(self, request, *args, **kwargs):
-        if not self.get_object().can_edit(request.user):
+        if not self.get_object().can_edit(request.user ):
             return HttpResponseRedirect('/login')
         return super(PermissionEditMixin, self).dispatch(request, *args, **kwargs)
 
 class PermissionViewMixin(object):
+    def isShared(self):
+        if 'p' in self.request.GET:
+            return True
+        else:
+            return False
+        
     def dispatch(self, request, *args, **kwargs):
-        if not self.get_object().can_view(request.user):
+        if not self.get_object().can_view(request.user, request.GET.get('p') ):
             return HttpResponseRedirect('/login')
         return super(PermissionViewMixin, self).dispatch(request, *args, **kwargs)
         

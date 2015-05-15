@@ -19,6 +19,9 @@ class Pack(models.Model):
     def __str__(self):
         return '%s (%s)' % (self.name, self.system)
     
+    def get_secret_url(self):
+        return reverse('manager:pack-detail', kwargs={'pk': self.id, 'slug':self.slug})+"?p="+str(self.viewKey)
+
     def get_absolute_url(self):
         return reverse('manager:pack-detail', kwargs={'pk': self.id, 'slug':self.slug})
 
@@ -43,10 +46,12 @@ class Pack(models.Model):
     def can_edit(self, user):
         return user.is_authenticated() and self.get_owner().username == user.username
         
-    def can_view(self, user):
-        return self.is_public() or self.can_edit(user)  
-
+    def can_view(self, user, viewPass=""):
+        return self.is_public() or self.can_edit(user) or viewPass == str(self.viewKey)
+    
 class Character(models.Model):
+    viewKey = models.UUIDField(unique=True, default=uuid.uuid4)
+
     pack = models.ForeignKey(Pack)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -59,8 +64,6 @@ class Character(models.Model):
     bio = models.TextField(blank=True)
     gmnotes = models.TextField(blank=True)
     
-    viewKey = models.UUIDField(unique=True, default=uuid.uuid4)
-
     class Meta:
         ordering = ["name"]
         unique_together = ("pack", "name")
@@ -68,6 +71,9 @@ class Character(models.Model):
     def __str__(self):
         return '%s (%s)' % (self.name, self.source)
     
+    def get_secret_url(self):
+        return reverse('manager:character-detail', kwargs={'pk': self.id, 'slug':self.slug})+"?p="+str(self.viewKey)
+
     def get_absolute_url(self):
         return reverse('manager:character-detail', kwargs={'pk': self.id, 'slug':self.slug})
 
@@ -89,8 +95,8 @@ class Character(models.Model):
     def can_edit(self, user):
         return user.is_authenticated() and self.get_owner().username == user.username
         
-    def can_view(self, user):
-        return self.is_public() or self.can_edit(user)  
+    def can_view(self, user, viewPass=""):
+        return self.is_public() or self.can_edit(user) or viewPass == str(self.viewKey)
     
 class Ability(models.Model):
     character = models.ForeignKey(Character)

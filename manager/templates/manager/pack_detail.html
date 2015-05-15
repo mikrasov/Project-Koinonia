@@ -1,13 +1,17 @@
 {% extends "manager/pack.html" %}
 {% load humanize %}
+{% load permissions %}
 
 {% block title %}{{ pack.name }}{% endblock %}
 {% block heading %}{{ pack.name }}{% endblock %}
 
 {% block actions %}
-	<a class="btn btn-info" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
 	<a class="btn btn-primary" href="{{pack.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>
-	<a class="btn btn-warning" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	{% if user|canEdit:pack%}
+		<a class="btn btn-primary" href="{{pack.get_secret_url}}"><span class="glyphicon glyphicon-share-alt"> Share</span></a>
+		<a class="btn btn-info" href="{{pack.get_absolute_import_url}}"><span class="glyphicon glyphicon-import"> Import</span></a>
+		<a class="btn btn-warning" href="{{pack.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
+	{% endif %}
 {% endblock %}
 
 {% block details %}	
@@ -28,7 +32,9 @@
 {% endblock %}
 
 {% block characters_actions %}
-<a class="btn btn-primary" href="{% url 'manager:character-create' %}"><span class="glyphicon glyphicon-plus"></span> Create</a>
+	{% if user|canEdit:pack%}
+		<a class="btn btn-primary" href="{% url 'manager:character-create' %}"><span class="glyphicon glyphicon-plus"></span> Create</a>
+	{% endif %}
 {% endblock %}
 
 {% block characters %}	
@@ -45,7 +51,7 @@
       <tbody>
       {% for character in pack.character_set.all %}
         <tr>
-          <td><a href="{{character.get_absolute_url}}">{{ character.name }}</a></td>
+          <td><a href="{% if view.isShared %}{{character.get_secret_url}}{% else %}{{character.get_absolute_url}}{% endif %}">{{ character.name }}</a></td>
           <td>{{ character.source }}</td>
           <td>{{ character.date_modified|naturalday }}</td>
           <td align="right"></td>

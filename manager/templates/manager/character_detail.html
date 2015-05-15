@@ -9,6 +9,7 @@
 	<a class="btn btn-primary" href="{{character.get_absolute_export_url}}"><span class="glyphicon glyphicon-export"> Export</span></a>
 	
 	{% if user|canEdit:character %}
+       <a class="btn btn-primary" href="{{character.get_secret_url}}"><span class="glyphicon glyphicon-share-alt"> Share</span></a>
 	   <a class="btn btn-danger" href="{{character.get_absolute_delete_url}}"><span class="glyphicon glyphicon-remove"> Delete</span></a>
 	   <a class="btn btn-primary" href="{{character.get_absolute_update_url}}"><span class="glyphicon glyphicon-edit"> Edit</span></a>
 	{% endif %}
@@ -23,8 +24,13 @@
 
 	<div class="col-xs-8"> 
 		<div class="col-xs-3"><strong>In Pack:</strong></div>	
-		<div class="col-xs-9"><a href="{{character.pack.get_absolute_url}}">{{ character.pack.name }}</a></div>
-		
+		<div class="col-xs-9">
+			{% if view.isShared %}
+				{{ character.pack.name }}
+			{% else %}
+				<a href="{{character.pack.get_absolute_url}}">{{ character.pack.name }}</a>
+			{% endif %}
+		</div>
 		{% if character.source %}
 		<div class="col-xs-3"><strong>Source:</strong></div>
 		<div class="col-xs-9">{{ character.source }}</div>

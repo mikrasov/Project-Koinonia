@@ -51,7 +51,8 @@ TEMPLATE_DEBUG = False #True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 ALLOWED_HOSTS = [
-    #'.koinonia.herokuapp.com',  # Allow domain and subdomains
+    '.koinonia.herokuapp.com',  # Allow domain and subdomains
+    '.koinonia.herokuapp.com.',  
     '.mikrasov.dev',
     '.mikrasov.dev.'
 ]

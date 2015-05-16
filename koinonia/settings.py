@@ -45,9 +45,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #True
+DEBUG = True #True
 
-TEMPLATE_DEBUG = False #True
+TEMPLATE_DEBUG = True #True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 ALLOWED_HOSTS = [

@@ -45,9 +45,9 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True #True
+DEBUG = False #True
 
-TEMPLATE_DEBUG = True #True
+TEMPLATE_DEBUG = False #True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 ALLOWED_HOSTS = [
@@ -135,4 +135,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)

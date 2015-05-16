@@ -15,7 +15,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -51,7 +50,11 @@ DEBUG = False #True
 TEMPLATE_DEBUG = False #True
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    #'.koinonia.herokuapp.com',  # Allow domain and subdomains
+    '.mikrasov.dev',
+    '.mikrasov.dev.'
+]
 
 
 # Application definition
@@ -131,5 +134,4 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
-
 STATIC_URL = '/static/'

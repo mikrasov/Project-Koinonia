@@ -4,25 +4,44 @@
 {% block title %}How-To{% endblock %}
 {% block content %}
 	<div class="panel">
-        <h2>Koinonia in a Nutshell</h2>
+        <h1>Koinonia in a Nutshell</h1>
         <p>
         	This is a comunity for sharing and managing characters from the <a target="_blank" href="http://roll20.net/">Roll20 Virtual Tabletop</a>
         	Share publically or with your friends. Manage characters and monsters online. Compatible with any game system.
         </p>
         <h3>Use Koinonia To:</h3>
         <div class="row">
+       		<div class="col-xs-4 text-center">
+				<img src="holder.js/150x150">
+	        	<h4>Export to Roll20</h4>
+			</div>
 	        <div class="col-xs-4 text-center">
 	        	<img src="holder.js/150x150">
 	        	<h4>Import from Roll20</h4>
 	        </div>	
-			<div class="col-xs-4">Export to Roll20</div>
-			<div class="col-xs-4">Share with Others</div>
+			
+			<div class="col-xs-4 text-center">
+				<img src="holder.js/150x150">
+	        	<h4>Share with Others</h4>
+	        </div>
 		</div>
     </div>
     
-    <div class="jumbotron">
-        <h2>Welcome to Koinonia</h2>
-        <p>This is the home of the Roll 20 Sharing portal. Want to trade characters between campaigns? This is the place.</p>
+    <div class="panel">
+        <h2>Export To Roll20</h2>
+        <p></p>
+        <a class="btn btn-primary" href="{% url 'manager:pack-list' %}">Get Started</a>
+    </div>
+    
+    <div class="panel">
+        <h2>Import From Roll20</h2>
+        <p></p>
+        <a class="btn btn-primary" href="{% url 'manager:pack-list' %}">Get Started</a>
+    </div>
+    
+    <div class="panel">
+        <h2>Share with Others<</h2>
+        <p></p>
         <a class="btn btn-primary" href="{% url 'manager:pack-list' %}">Get Started</a>
     </div>
     

@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load django_bootstrap_breadcrumbs %}
 
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -97,7 +96,6 @@
 	 </nav>
 	
 	 {% block root_content %}
-	 	{% render_breadcrumbs %}
 	 	<div class="container">
     		<div class="main-content">
 	      		{% block content %}{% endblock %}
